@@ -8,6 +8,8 @@
 
 import weakref
 
+import xmlrpclib
+
 class PostHandler(object):
     '''the post hander wraps function to be excuted in paralle
     '''
@@ -29,10 +31,11 @@ class ClientAgent(object):
     # YOUR CODE HERE
     def __init__(self):
         self.post = PostHandler(self)
-    
+        self.s = xmlrpclib.ServerProxy('http://localhost:8000')
+        
     def get_angle(self, joint_name):
         '''get sensor value of given joint'''
-        # YOUR CODE HERE
+        self.s.get_angle(joint_name)
     
     def set_angle(self, joint_name, angle):
         '''set target angle of joint for PID controller
@@ -58,9 +61,15 @@ class ClientAgent(object):
         '''solve the inverse kinematics and control joints use the results
         '''
         # YOUR CODE HERE
+        
+    def sendeNachricht(self, nachricht):
+        self.s.nach(nachricht)
+        print "sende: " + nachricht
 
 if __name__ == '__main__':
     agent = ClientAgent()
     # TEST CODE HERE
-
+    print agent.s.system.listMethods()
+    angle = 'HeadYaw'
+    print str(agent.get_angle(angle))
 
